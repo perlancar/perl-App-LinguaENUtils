@@ -19,7 +19,17 @@ my %words_arg = (
     },
 );
 
-$SPEC{to_singular} = {
+my %nums_arg = (
+    nums => {
+        'x.name.is_plural' => 1,
+        schema => ['array*', of=>'num*', min_len=>1],
+        req => 1,
+        pos => 0,
+        greedy => 1,
+    },
+);
+
+$SPEC{plural_to_singular} = {
     v => 1.1,
     summary => 'Convert plural noun to singular',
     'x.no_index' => 1,
@@ -28,7 +38,7 @@ $SPEC{to_singular} = {
     },
     result_naked => 1,
 };
-sub to_singular {
+sub plural_to_singular {
     require Lingua::EN::PluralToSingular;
 
     my %args = @_;
@@ -36,13 +46,14 @@ sub to_singular {
     [map {Lingua::EN::PluralToSingular::to_singular($_)} @{ $args{words} }];
 }
 
-$SPEC{to_plural} = {
+$SPEC{singular_to_plural} = {
     v => 1.1,
     summary => 'Convert singular noun to plural',
     'x.no_index' => 1,
     args => {
         %words_arg,
     },
+    result_naked => 1,
 };
 sub to_plural {
     require Lingua::EN::Inflect;
@@ -54,20 +65,36 @@ sub to_plural {
 
 $SPEC{num_to_word} = {
     v => 1.1,
-    summary => 'Convert number (123) to phrase ("one hundred twenty three")',
+    summary => 'Convert number (123) to word ("one hundred twenty three")',
     'x.no_index' => 1,
+    args => {
+        %nums_arg,
+    },
+    result_naked => 1,
 };
-sub num_to_phrase {
-    [501, "Not yet implemented"];
+sub num_to_word {
+    require Lingua::EN::Nums2Words;
+
+    my %args = @_;
+
+    [map {lc(Lingua::EN::Nums2Words::num2word($_))} @{ $args{nums} }];
 }
 
 $SPEC{word_to_num} = {
     v => 1.1,
     summary => 'Convert phrase ("one hundred twenty three") to number (123)',
     'x.no_index' => 1,
+    args => {
+        %words_arg,
+    },
+    result_naked => 1,
 };
-sub phrase_to_num {
-    [501, "Not yet implemented"];
+sub word_to_num {
+    require Lingua::EN::Words2Nums;
+
+    my %args = @_;
+
+    [map {Lingua::EN::Words2Nums::words2nums($_)} @{ $args{words} }];
 }
 
 # note: term for converting to_singular & to_plural = inflect (to singular or plural)
@@ -94,11 +121,20 @@ sub phrase_to_num {
 1;
 # ABSTRACT: Command-line utilities related to the English language
 
+=for Pod::Coverage .+
+
 =head1 SYNOPSIS
 
 This distribution provides the following command-line utilities:
 
 #INSERT_EXECS_LIST
+
+
+=head1 DESCRIPTION
+
+This distribution will become a collection of CLI utilities related to English
+language. Currently it contains very little and the collection will be expanded
+in subsequent releases.
 
 
 =head1 SEE ALSO

@@ -7,34 +7,16 @@ use 5.010001;
 use strict;
 use warnings;
 
+use App::LinguaCommonUtils qw(%arg_words %arg_nums);
+
 our %SPEC;
-
-my %words_arg = (
-    words => {
-        'x.name.is_plural' => 1,
-        schema => ['array*', of=>'str*', min_len=>1],
-        req => 1,
-        pos => 0,
-        greedy => 1,
-    },
-);
-
-my %nums_arg = (
-    nums => {
-        'x.name.is_plural' => 1,
-        schema => ['array*', of=>'num*', min_len=>1],
-        req => 1,
-        pos => 0,
-        greedy => 1,
-    },
-);
 
 $SPEC{plural_to_singular} = {
     v => 1.1,
     summary => 'Convert plural noun to singular',
     'x.no_index' => 1,
     args => {
-        %words_arg,
+        %arg_words,
     },
     result_naked => 1,
 };
@@ -51,7 +33,7 @@ $SPEC{singular_to_plural} = {
     summary => 'Convert singular noun to plural',
     'x.no_index' => 1,
     args => {
-        %words_arg,
+        %arg_words,
     },
     result_naked => 1,
 };
@@ -68,7 +50,7 @@ $SPEC{num_to_word} = {
     summary => 'Convert number (123) to word ("one hundred twenty three")',
     'x.no_index' => 1,
     args => {
-        %nums_arg,
+        %arg_nums,
     },
     result_naked => 1,
 };
@@ -85,7 +67,7 @@ $SPEC{word_to_num} = {
     summary => 'Convert phrase ("one hundred twenty three") to number (123)',
     'x.no_index' => 1,
     args => {
-        %words_arg,
+        %arg_words,
     },
     result_naked => 1,
 };

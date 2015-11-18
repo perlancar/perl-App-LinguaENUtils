@@ -1,5 +1,12 @@
 Revision history for App-LinguaENUtils
 
+0.03    2015-11-18 (PERLANCAR)
+
+	- No functional changes.
+
+	- [refactor] Extract common arguments to App::LinguaCommonUtils.
+
+
 0.02    2015-11-18 (PERLANCAR)
 
         - No functional changes.

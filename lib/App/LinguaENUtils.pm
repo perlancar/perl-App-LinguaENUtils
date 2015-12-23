@@ -37,7 +37,7 @@ $SPEC{singular_to_plural} = {
     },
     result_naked => 1,
 };
-sub to_plural {
+sub singular_to_plural {
     require Lingua::EN::Inflect;
 
     my %args = @_;
